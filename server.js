@@ -5,4 +5,4 @@ http
     res.writeHead(200, { "Content-Type": "text/plain" });
     res.end("Amigo Secreto");
   })
-  .listen(process.env.PORT);
+  .listen(process.env.PORT || 3000);
