@@ -3,7 +3,7 @@ const path = require("path");
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, "frontend/build")));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 const port = process.env.PORT || 3000;
 app.listen(port);
