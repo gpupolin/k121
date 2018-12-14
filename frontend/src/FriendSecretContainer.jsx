@@ -21,8 +21,8 @@ export default function FriendSecretContainer(props) {
   const [isFetchingFriend, setIsFetchingFriend] = useState(false);
   const [isFetchingFriendList, setIsFetchingFriendList] = useState(false);
 
-  useEffect(() => {
-    setFriends(friendSecret.getFriends());
+  useEffect(async () => {
+    setFriends(await friendSecret.getFriends());
   }, []);
 
   return (

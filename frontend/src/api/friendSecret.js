@@ -29,8 +29,12 @@ const mockDrawList = [
 ];
 
 class FriendSecretService {
-  getFriends() {
-    return [...mockList];
+  async getFriends() {
+
+    const res = await fetch('/api/friends');
+
+    return await res.json()
+    
   }
 
   saveFriend(friend) {

@@ -20,6 +20,13 @@ app.get("/api/friends", (req, res) => {
       email: "melissa@gmail.com",
       friend_id: null,
       friend: null
+    },
+    {
+      id: 3,
+      name: "Guilherme",
+      email: "gpupolin@gmail.com",
+      friend_id: null,
+      friend: null
     }
   ]);
 });
@@ -28,5 +35,5 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 app.listen(port);
