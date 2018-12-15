@@ -9,7 +9,7 @@ import "@rmwc/circular-progress/circular-progress.css";
 
 const Container = styled.div`
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   /* align-items: center; */
   /* margin-top: 100px; */
   flex-basis: 35%;
@@ -20,6 +20,10 @@ const Container = styled.div`
     & .rmwc-circular-progress {
       margin: 0 0 0 5px;
     }
+  }
+
+  @media (max-width: 768px) {
+    flex-basis: 80%;
   }
 `;
 
@@ -50,7 +54,7 @@ export default function FriendsForm(props) {
       setNameRequired(false);
     }
 
-    if (!email || email.trim() === "") {
+    if (!email || email.trim() === "" || !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(email)) {
       setEmailRequired(true);
       error = true;
     } else {
@@ -78,6 +82,7 @@ export default function FriendsForm(props) {
           outlined
           label="Nome"
           value={name}
+          maxLength={100}
           onChange={evt => setName(evt.target.value)}
         />
         <TextRequired persistent validationMsg>
@@ -88,8 +93,10 @@ export default function FriendsForm(props) {
         <TextField
           outlined
           label="Email"
+          maxLength={100}
           value={email}
           onChange={evt => setEmail(evt.target.value)}
+          pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
         />
         <TextRequired persistent validationMsg>
           {emailRequired && "O email é obrigatório"}

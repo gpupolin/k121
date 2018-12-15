@@ -28,8 +28,8 @@ const Container = styled.div`
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  height:100%;
-  overflow:auto;
+  height: 100%;
+  overflow: auto;
 `;
 
 export default function FriendsList(props) {
@@ -49,13 +49,14 @@ export default function FriendsList(props) {
     <Container>
       <div>
         <DrawFab
+          disabled={props.friends.length < 2}
           onClick={props.onDrawSecretFriend}
-          theme={"background primary"}
+          theme={`background ${props.friends.length < 2 ? "textIconOnBackground" : "primary"}`}
           icon='play_arrow'
           label='Sortear'
         />
       </div>
-      <DataTable>
+      <DataTable stickyRows={1}>
         <DataTableContent>
           <DataTableHead>
             <DataTableRow>
@@ -96,6 +97,10 @@ export default function FriendsList(props) {
   );
 }
 
+const DataTableCellAllowEdit = styled(DataTableCell)`
+  cursor: pointer;
+`;
+
 const FriendItem = props => {
   const [isNameEditMode, setNameIsEditMode] = useState(false);
   const [isEmailEditMode, setIsEmailEditMode] = useState(false);
@@ -104,53 +109,80 @@ const FriendItem = props => {
   const [email, setEmail] = useState(props.email);
 
   function handleEditEmail(evt) {
+    if (evt.keyCode === 27) {
+      setIsEmailEditMode(false);
+      setEmail(props.email);
+      return;
+    }
     if (evt.keyCode === 13) {
+      if (
+        !email ||
+        email.trim() === "" ||
+        !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(email)
+      ) {
+        return;
+      }
+
       setIsEmailEditMode(false);
       props.onFriendUpdate({
         _id: props._id,
-        name: name,
+        name: props.name,
         email: email
       });
     }
   }
 
   function handleEditName(evt) {
+    if (evt.keyCode === 27) {
+      setNameIsEditMode(false);
+      setName(props.name);
+      return;
+    }
     if (evt.keyCode === 13) {
+      if (!name || name.trim() === "") {
+        return;
+      }
+
       setNameIsEditMode(false);
       props.onFriendUpdate({
         _id: props._id,
         name: name,
-        email: email
+        email: props.email
       });
     }
   }
 
   return (
     <DataTableRow>
-      <DataTableCell onClick={() => !isNameEditMode && setNameIsEditMode(true)}>
+      <DataTableCellAllowEdit
+        onClick={() => !isNameEditMode && setNameIsEditMode(true)}
+      >
         {isNameEditMode ? (
           <TextField
             onKeyDown={handleEditName}
             value={name}
+            maxLength={100}
             onChange={evt => setName(evt.target.value)}
           />
         ) : (
           <span>{name}</span>
         )}
-      </DataTableCell>
-      <DataTableCell
+      </DataTableCellAllowEdit>
+      <DataTableCellAllowEdit
         onClick={() => !isEmailEditMode && setIsEmailEditMode(true)}
       >
         {isEmailEditMode ? (
           <TextField
             onKeyDown={handleEditEmail}
             value={email}
+            maxLength={100}
+            pattern='^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$'
             onChange={evt => setEmail(evt.target.value)}
           />
         ) : (
           <span>{email}</span>
         )}
-      </DataTableCell>
+      </DataTableCellAllowEdit>
       <DataTableCell>
         {!props.friend ? " - " : props.friendVisible ? props.friend.name : "🙈"}
       </DataTableCell>

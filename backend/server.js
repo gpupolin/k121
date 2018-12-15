@@ -88,7 +88,8 @@ app.post("/api/friends/draw", (req, res) => {
           .exec((err, friends) => {
             friends.map(person => {
               const data = {
-                from: "Amigo Secreto Teste <me@amigosecreto-k121.herokuapp.com>",
+                from:
+                  "Amigo Secreto Teste <me@amigosecreto-k121.herokuapp.com>",
                 to: person.email,
                 subject: `Sorteio amigo secreto`,
                 text: `${person.name} seu amigo secreto é ${person.friend.name}`
@@ -108,36 +109,40 @@ app.post("/api/friends/draw", (req, res) => {
 
 const draw = array => {
   const friends = JSON.parse(array);
-  return friends.reduce((acc, person, index) => {
-    const possiblesFriends = friends
-      .filter(a => a._id !== person._id)
-      .filter(a => !acc.some(l => l.friend._id === a._id))
-      .map(a => {
-        return { name: a.name, _id: a._id, email: a.email };
-      });
+  return friends
+    .sort((a, b) => Math.random())
+    .reduce((acc, person, index) => {
+      const possiblesFriends = friends
+        .filter(a => a._id !== person._id)
+        .filter(a => !acc.some(l => l.friend._id === a._id))
+        .map(a => {
+          return { name: a.name, _id: a._id, email: a.email };
+        });
 
-    if (
-      possiblesFriends.length === 2 &&
-      possiblesFriends.some(p => p._id === friends[index + 1]._id)
-    ) {
+      if (
+        possiblesFriends.length === 2 &&
+        possiblesFriends.some(p => p._id === friends[index + 1]._id)
+      ) {
+        return acc.concat({
+          ...person,
+          ...{
+            friend: possiblesFriends.filter(
+              p => p._id === friends[index + 1]._id
+            )[0]
+          }
+        });
+      }
+
       return acc.concat({
         ...person,
         ...{
-          friend: possiblesFriends.filter(
-            p => p._id === friends[index + 1]._id
-          )[0]
+          friend:
+            possiblesFriends[
+              Math.floor(Math.random() * possiblesFriends.length)
+            ]
         }
       });
-    }
-
-    return acc.concat({
-      ...person,
-      ...{
-        friend:
-          possiblesFriends[Math.floor(Math.random() * possiblesFriends.length)]
-      }
-    });
-  }, []);
+    }, []);
 };
 
 app.get("*", (req, res) => {
