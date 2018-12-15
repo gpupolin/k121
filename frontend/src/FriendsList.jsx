@@ -63,7 +63,7 @@ export default function FriendsList(props) {
               <DataTableHeadCell alignMiddle>Email</DataTableHeadCell>
               <DataTableHeadCell alignMiddle>
                 Amigo{" "}
-                {props.friends.some(f => f.friend_id) && (
+                {props.friends.some(f => f.friend) && (
                   <IconButton
                     checked={friendVisible}
                     onClick={() => setFriendVisible(!friendVisible)}
@@ -152,7 +152,7 @@ const FriendItem = props => {
         )}
       </DataTableCell>
       <DataTableCell>
-        {!props.friend ? " - " : props.friendVisible ? props.friend : "🙈"}
+        {!props.friend ? " - " : props.friendVisible ? props.friend.name : "🙈"}
       </DataTableCell>
       <DataTableCell>
         <Button onClick={() => props.onRemoveFriend(props._id)}>excluir</Button>

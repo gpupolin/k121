@@ -30,58 +30,61 @@ const mockDrawList = [
 
 class FriendSecretService {
   async getFriends() {
+    const res = await fetch("/api/friends");
 
-    const res = await fetch('/api/friends');
-
-    return await res.json()
-    
+    return await res.json();
   }
 
   async addFriend(friend) {
-    
-    const res = await fetch('/api/friends', {
-      method: 'POST', // or 'PUT'
+    const res = await fetch("/api/friends", {
+      method: "POST", // or 'PUT'
       body: JSON.stringify(friend), // data can be `string` or {object}!
-      headers:{
-        'Content-Type': 'application/json'
+      headers: {
+        "Content-Type": "application/json"
       }
-    })
+    });
 
     const friendRet = await res.json();
-    
-    return {...friendRet};
+
+    return { ...friendRet };
   }
 
   async updateFriend(friend) {
-    
     const res = await fetch(`/api/friends/${friend._id}`, {
-      method: 'PUT', // or 'PUT'
+      method: "PUT", // or 'PUT'
       body: JSON.stringify(friend), // data can be `string` or {object}!
-      headers:{
-        'Content-Type': 'application/json'
+      headers: {
+        "Content-Type": "application/json"
       }
-    })
+    });
 
     const friendRet = await res.json();
-    
-    return {...friendRet};
+
+    return { ...friendRet };
   }
 
   async removeFriend(friend_id) {
     //sendToAPI
     const res = await fetch(`/api/friends/${friend_id}`, {
-      method: 'DELETE'
-    })
+      method: "DELETE"
+    });
 
     const friendRet = await res.json();
-    
-    return {...friendRet};
+
+    return { ...friendRet };
   }
 
-  drawSecretFriend() {
-    //sendToAPI
+  async drawSecretFriend() {
+    const res = await fetch(`/api/friends/draw`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
 
-    return [...mockDrawList];
+    const friendRet = await res.json();
+
+    return [...friendRet];
   }
 }
 
