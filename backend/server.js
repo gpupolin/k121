@@ -107,6 +107,7 @@ app.post("/api/friends/draw", (req, res) => {
   });
 });
 
+//SORTEIO
 const draw = array => {
   const friends = JSON.parse(array);
   return friends
