@@ -86,7 +86,7 @@ app.post("/api/friends/draw", (req, res) => {
         Friend.find()
           .populate("friend")
           .exec((err, friends) => {
-            friends.map(friend => {
+            friends.map(person => {
               const data = {
                 from: "Amigo Secreto Teste <me@samples.mailgun.org>",
                 to: person.email,
