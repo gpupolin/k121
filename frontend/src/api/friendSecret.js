@@ -37,17 +37,45 @@ class FriendSecretService {
     
   }
 
-  saveFriend(friend) {
-    //sendToAPI
+  async addFriend(friend) {
+    
+    const res = await fetch('/api/friends', {
+      method: 'POST', // or 'PUT'
+      body: JSON.stringify(friend), // data can be `string` or {object}!
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
 
-    return {
-      ...friend,
-      ...{ id: 3, friend_id: null, friend: null }
-    };
+    const friendRet = await res.json();
+    
+    return {...friendRet};
   }
 
-  removeFriend(friend_id) {
+  async updateFriend(friend) {
+    
+    const res = await fetch(`/api/friends/${friend._id}`, {
+      method: 'PUT', // or 'PUT'
+      body: JSON.stringify(friend), // data can be `string` or {object}!
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const friendRet = await res.json();
+    
+    return {...friendRet};
+  }
+
+  async removeFriend(friend_id) {
     //sendToAPI
+    const res = await fetch(`/api/friends/${friend_id}`, {
+      method: 'DELETE'
+    })
+
+    const friendRet = await res.json();
+    
+    return {...friendRet};
   }
 
   drawSecretFriend() {

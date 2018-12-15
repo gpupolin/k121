@@ -20,15 +20,16 @@ import "@rmwc/data-table/data-table.css";
 import { CircularProgress } from "@rmwc/circular-progress";
 
 const DrawFab = styled(Fab)`
-  margin-bottom: 15px;
-  align-self: flex-end;
+  margin: 15px 0;
 `;
 
 const Container = styled.div`
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
+  height:100%;
+  overflow:auto;
 `;
 
 export default function FriendsList(props) {
@@ -46,12 +47,14 @@ export default function FriendsList(props) {
 
   return (
     <Container>
-      <DrawFab
-        onClick={props.onDrawSecretFriend}
-        theme={"background primary"}
-        icon="play_arrow"
-        label="Sortear"
-      />
+      <div>
+        <DrawFab
+          onClick={props.onDrawSecretFriend}
+          theme={"background primary"}
+          icon='play_arrow'
+          label='Sortear'
+        />
+      </div>
       <DataTable>
         <DataTableContent>
           <DataTableHead>
@@ -64,8 +67,8 @@ export default function FriendsList(props) {
                   <IconButton
                     checked={friendVisible}
                     onClick={() => setFriendVisible(!friendVisible)}
-                    icon="visibility_off"
-                    onIcon="visibility"
+                    icon='visibility_off'
+                    onIcon='visibility'
                   />
                 )}
               </DataTableHeadCell>
@@ -78,7 +81,7 @@ export default function FriendsList(props) {
             {props.friends.map(f => {
               return (
                 <FriendItem
-                  key={f.id}
+                  key={f._id}
                   {...f}
                   friendVisible={friendVisible}
                   onRemoveFriend={props.onRemoveFriend}
@@ -104,6 +107,7 @@ const FriendItem = props => {
     if (evt.keyCode === 13) {
       setIsEmailEditMode(false);
       props.onFriendUpdate({
+        _id: props._id,
         name: name,
         email: email
       });
@@ -114,6 +118,7 @@ const FriendItem = props => {
     if (evt.keyCode === 13) {
       setNameIsEditMode(false);
       props.onFriendUpdate({
+        _id: props._id,
         name: name,
         email: email
       });
@@ -150,7 +155,7 @@ const FriendItem = props => {
         {!props.friend ? " - " : props.friendVisible ? props.friend : "🙈"}
       </DataTableCell>
       <DataTableCell>
-        <Button onClick={() => props.onRemoveFriend(props.id)}>excluir</Button>
+        <Button onClick={() => props.onRemoveFriend(props._id)}>excluir</Button>
       </DataTableCell>
     </DataTableRow>
   );

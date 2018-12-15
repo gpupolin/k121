@@ -23,7 +23,7 @@ const Container = styled.div`
   }
 `;
 
-const FormField = styled.p`
+const FormField = styled.div`
   display: flex;
   flex-flow: column;
   margin: 10px 0;
@@ -34,8 +34,8 @@ const TextRequired = styled(TextFieldHelperText)`
 `;
 
 export default function FriendsForm(props) {
-  const [name, setName] = useState(null);
-  const [email, setEmail] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
   const [nameRequired, setNameRequired] = useState(false);
   const [emailRequired, setEmailRequired] = useState(false);
@@ -66,8 +66,8 @@ export default function FriendsForm(props) {
       email: email
     });
 
-    setName(null);
-    setEmail(null);
+    setName("");
+    setEmail("");
   }
 
   return (
