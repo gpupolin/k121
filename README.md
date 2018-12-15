@@ -5,7 +5,8 @@
 Primeiro é necessário instalar as dependências, na raíz do projeto execute o seguinte script:
 
 ```sh
-npm run install:allß
+npm run install:all
+```
 
 Após instalar as dependencias só executar o seguinte comando [localhost:3000](http://localhost:3000):
 
