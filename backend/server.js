@@ -4,6 +4,10 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const async = require("async");
 
+const api_key = process.env.MAIL_API_KEY;
+const DOMAIN = "samples.mailgun.org";
+const mailgun = require("mailgun-js")({ apiKey: api_key, domain: DOMAIN });
+
 if (process.env.NODE_ENV === "production") {
   mongoose.connect(process.env.MONGODB_URI);
 } else {
@@ -82,6 +86,20 @@ app.post("/api/friends/draw", (req, res) => {
         Friend.find()
           .populate("friend")
           .exec((err, friends) => {
+            friends.map(friend => {
+              const data = {
+                from: "Amigo Secreto Teste <me@samples.mailgun.org>",
+                to: person.email,
+                subject: `Sorteio amigo secreto`,
+                text: `${person.name} seu amigo secreto é ${person.friend.name}`
+              };
+
+              mailgun.messages().send(data, function(error, body) {
+                console.log(error);
+                console.log(body);
+              });
+            });
+
             res.json(friends);
           });
       }
@@ -103,7 +121,6 @@ const draw = array => {
       possiblesFriends.length === 2 &&
       possiblesFriends.some(p => p._id === friends[index + 1]._id)
     ) {
-      console.log("PASSOU AQUI ");
       return acc.concat({
         ...person,
         ...{
