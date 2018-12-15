@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const async = require("async");
 
-const api_key = process.env.MAIL_API_KEY;
-const DOMAIN = "samples.mailgun.org";
+const api_key = process.env.MAIL_API_KEY || "API_KEY";
+const DOMAIN = process.env.MAIL_DOMAIN || "LOCALHOST";
 const mailgun = require("mailgun-js")({ apiKey: api_key, domain: DOMAIN });
 
 if (process.env.NODE_ENV === "production") {
@@ -88,7 +88,7 @@ app.post("/api/friends/draw", (req, res) => {
           .exec((err, friends) => {
             friends.map(person => {
               const data = {
-                from: "Amigo Secreto Teste <me@samples.mailgun.org>",
+                from: "Amigo Secreto Teste <me@amigosecreto-k121.herokuapp.com>",
                 to: person.email,
                 subject: `Sorteio amigo secreto`,
                 text: `${person.name} seu amigo secreto é ${person.friend.name}`
@@ -96,7 +96,6 @@ app.post("/api/friends/draw", (req, res) => {
 
               mailgun.messages().send(data, function(error, body) {
                 console.log(error);
-                console.log(body);
               });
             });
 
